@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <base target="_top">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+    <?!= include('AutoCompleteStyle'); ?>
+
+
+    <script>
+
+    
+$(document).ready(function(){
+  getStaffNames();
+  $("#butn").click(function(){
+  $("#display_error").fadeIn(10).fadeOut(3000);
+  });
+
+});
+
+    function AddRow()
+
+    {
+      const elem = document.getElementById("display_error");
+      var staffName = document.getElementById("staffname").value;
+      var notes = document.getElementById("notes").value;
+      var location = document.getElementById("location").value;
+
+      if(staffName != "" && notes != "" && location != "" )
+      {
+
+      google.script.run.AddRecord(staffName, location, notes);
+
+      google.script.run.sendEmails();
+
+      document.getElementById("staffname").value = '';
+      document.getElementById("notes").value = '';
+      document.getElementById("location").value = '';
+      document.getElementById("display_error").innerHTML = "Request Submitted";
+      
+      elem.style.color = "#067535";
+
+      }
+      else
+      {
+        document.getElementById("display_error").innerHTML = "Please check fields.";
+        elem.style.color = "#ff0000";
+
+      }
+
+    }
+
+    function getStaffNames()
+
+    {
+
+      google.script.run.withSuccessHandler(function(ar) 
+
+      {
+
+        console.log(ar);
+
+        namesArray1 = [];
+
+        ar.forEach(function(item, index) 
+
+        {
+
+            namesArray1.push(item[0]);
+
+        });
+
+        $("#staffname").autocomplete({
+
+          source: namesArray1
+
+        });
+
+
+
+      }).getStaffNames();
+
+    }
+
+    </script>
+
+ </head>
+
+  <body>
+
+  <div style="padding: 10px;" >
+
+  <form>
+
+  <div class="form-group col-md-2">
+
+  <label for="lastname">Staff Name</label>
+
+  <input type="text" id="staffname" class="form-control" />
+
+  </div> 
+
+  <div style="padding: 10px;" >
+
+  <div class="form-row">
+
+  <div class="form-group col-md-2">
+
+  <label for="location">Location or Room Number</label>
+
+  <input type="text" id="location" class="form-control" />
+
+  </div>
+
+  </div>
+    
+  <div class="form-row">
+
+  <div class="form-group col-md-4">
+
+  <label for="notes" >Service Request</label>
+
+  <input type="text" id="notes" class="form-control "/>
+
+  </div>
+
+  </div>
+
+  <div class="form-group">
+
+  <input type="button" value="Submit" class="btn btn-primary" id="butn" onclick="AddRow()" />
+
+  <div id="display_error" ></div>
+
+  </div>
+  
+
+  </form>
+
+  </div>
+
+  </body>
+
+</html>
