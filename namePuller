@@ -1,0 +1,38 @@
+function updateStaffSheet() {
+
+var sheet = SpreadsheetApp.getActive();
+ var sheet1 = sheet.getSheetByName('TeacherNames');
+  
+  var sheet1range = sheet.getRange("A:F")
+
+ 
+  var data = [];// array to store values
+  data.push(['Name' ,'Email']);// store headers
+  var pageToken, page;
+  do {
+    page = AdminDirectory.Users.list({
+    
+      domain: 'ommitted',
+      query: "orgUnitPath='ommitted'",
+     
+      pageToken: pageToken
+    });
+    var users = page.users;
+    if (users) {
+      for (var i = 0; i < users.length; i++) {
+        
+        var user = users[i];
+        
+        
+        data.push([ user.name.fullName, user.primaryEmail  ]);//store in an array of arrays (one for each row)
+      }
+    } else {
+    Logger.log('No users found.');
+       }
+    pageToken = page.nextPageToken;
+  } while (pageToken);
+  
+  sheet1.getRange(1,1,data.length,data[0].length).setValues(data);
+ 
+  
+}
