@@ -8,4 +8,4 @@ Several triggers are used to call different function to complete different tasks
 store request information to check if the request was done.
 
 Updated project history via git-filter repo tool to practice obscuring history in the event of leak
-via committing a password or ssh key. There will now be 5 commits but after using the tool but the changes for the file will no longer show
+via committing a password or ssh key. There will now be 8 commits but after using the tool but the changes for the file (namePuller) will no longer show
